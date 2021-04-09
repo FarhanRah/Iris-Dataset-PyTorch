@@ -53,3 +53,19 @@ for i in range(EPOCHS):
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
+
+print("--------------------------------------")
+
+# Use the test data
+with torch.no_grad():
+    correct_results = 0
+
+    for i, data in enumerate(X_test):
+        y_pred = model.forward(data)
+        print(f'{i + 1}) {str(y_pred)}')
+
+        if y_pred.argmax().item() == y_test[i]:
+            correct_results += 1
+
+    print(f'We got {correct_results} correct results!')
+
