@@ -1,16 +1,22 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+# import pandas
+# from sklearn.model_selection import train_test_split
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+class Model(nn.Module):
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    # hl = Hidden Layer
+    def __init__(self, input_layer=4, hl1=8, hl2=9, output_layer=3):
+        super().__init__()
+        self.fc1 = nn.Linear(input_layer, hl1)
+        self.fc2 = nn.Linear(hl1, hl2)
+        self.out_connection = nn.Linear(hl2, output_layer)
+
+    def forward(self, state):
+        state = F.relu(self.fc1(state))
+        state = F.relu(self.fc2(state))
+        pred_val = self.out_connection(state)
+
+        return pred_val
