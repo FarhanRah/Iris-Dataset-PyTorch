@@ -1,8 +1,8 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-# import pandas
-# from sklearn.model_selection import train_test_split
+import pandas
+from sklearn.model_selection import train_test_split
 
 
 class Model(nn.Module):
@@ -20,3 +20,36 @@ class Model(nn.Module):
         pred_val = self.out_connection(state)
 
         return pred_val
+
+
+# Train the data
+model = Model()
+
+data = pandas.read_csv("iris.csv")
+X = data.drop('variety', axis=1).values  # Data
+y = data['variety'].values  # Labels
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+X_train = torch.FloatTensor(X_train)
+X_test = torch.FloatTensor(X_test)
+y_train = torch.LongTensor(y_train)
+y_test = torch.LongTensor(y_test)
+
+criterion = nn.CrossEntropyLoss()
+optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
+
+EPOCHS = 100
+losses = []
+
+for i in range(EPOCHS):
+    y_pred = model.forward(X_train)
+    loss = criterion(y_pred, y_train)
+    losses.append(loss)
+
+    # We are printing every 10 epochs
+    if i % 10 == 0:
+        print(f'Epoch {i} has loss {loss}')
+
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
