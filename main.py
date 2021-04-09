@@ -69,3 +69,16 @@ with torch.no_grad():
 
     print(f'We got {correct_results} correct results!')
 
+print("--------------------------------------")
+
+# Now lets use some completely unseen data
+with torch.no_grad():
+    mystery_iris = torch.tensor([5.6, 3.7, 2.2, 0.5])
+
+    result = model(mystery_iris).argmax().item()
+    if result == 0:
+        print(f'[INFO] {model(mystery_iris)} is an Iris Setosa.')
+    elif result == 1:
+        print(f'[INFO] {model(mystery_iris)} is an Iris Virginica.')
+    else:
+        print(f'[INFO] {model(mystery_iris)} is an Iris Versicolor.')
